@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tirth & Siddhi Wedding Invitation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: radial-gradient(circle at top, #fff8ef, #f3dfc2 45%, #c99863);
+      min-height: 100vh;
+      color: #4b2e1f;
+      overflow-x: hidden;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .intro {
+      width: min(92vw, 480px);
+    }
+
+    .title {
+      font-size: clamp(2rem, 7vw, 3.6rem);
+      font-weight: 400;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      margin-bottom: 34px;
+      opacity: 0.82;
+    }
+
+    .envelope-wrap {
+      position: relative;
+      width: min(86vw, 420px);
+      height: 270px;
+      margin: 0 auto 32px;
+      perspective: 1100px;
+      cursor: pointer;
+      filter: drop-shadow(0 24px 32px rgba(77, 45, 23, 0.28));
+    }
+
+    .envelope {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      transform-style: preserve-3d;
+    }
+
+    .back {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, #f8e4c7, #e6b97d);
+      border-radius: 10px;
+      border: 1px solid rgba(120, 72, 28, 0.28);
+    }
+
+    .letter {
+      position: absolute;
+      left: 7%;
+      right: 7%;
+      bottom: 18px;
+      height: 190px;
+      background: #fffaf2;
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(70, 35, 10, 0.18);
+      transform: translateY(55px);
+      transition: transform 1s ease 0.35s, opacity 0.8s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 1;
+    }
+
+    .letter-content {
+      border: 1px solid rgba(166, 116, 54, 0.35);
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .monogram {
+      font-size: 2.8rem;
+      color: #9b5f2b;
+      line-height: 1;
+    }
+
+    .small-text {
+      font-size: 0.88rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6e4426;
+    }
+
+    .front-left,
+    .front-right,
+    .front-bottom {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+    }
+
+    .front-left {
+      background: linear-gradient(135deg, transparent 50%, #efc68f 50%);
+      border-radius: 10px;
+    }
+
+    .front-right {
+      background: linear-gradient(225deg, transparent 50%, #e8b575 50%);
+      border-radius: 10px;
+    }
+
+    .front-bottom {
+      background: linear-gradient(0deg, #d89d5d 0 50%, transparent 50%);
+      border-radius: 10px;
+    }
+
+    .flap {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(315deg, transparent 50%, #f6d8ad 50%);
+      transform-origin: top center;
+      transition: transform 1s ease;
+      z-index: 5;
+      border-radius: 10px;
+    }
+
+    .seal {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #d9a45d, #9c552b);
+      color: #fff8ec;
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      z-index: 6;
+      box-shadow: 0 6px 16px rgba(92, 42, 16, 0.28);
+      transition: opacity 0.35s ease, transform 0.55s ease;
+    }
+
+    .open .flap {
+      transform: rotateX(178deg);
+    }
+
+    .open .letter {
+      transform: translateY(-86px);
+    }
+
+    .open .seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.4);
+    }
+
+    .open-button {
+      border: none;
+      background: #7d431f;
+      color: #fff7ed;
+      font-size: 1rem;
+      padding: 14px 26px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(73, 36, 13, 0.24);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .open-button:hover {
+      transform: translateY(-2px);
+      background: #663418;
+    }
+
+    .video-section {
+      display: none;
+      min-height: 100vh;
+      padding: 30px 16px 50px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .video-section.show {
+      display: flex;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .video-card {
+      width: min(96vw, 520px);
+      background: rgba(255, 250, 242, 0.76);
+      border: 1px solid rgba(130, 78, 35, 0.22);
+      border-radius: 28px;
+      padding: 14px;
+      box-shadow: 0 24px 60px rgba(73, 36, 13, 0.22);
+      backdrop-filter: blur(8px);
+    }
+
+    video {
+      width: 100%;
+      max-height: 82vh;
+      border-radius: 20px;
+      display: block;
+      background: #000;
+    }
+
+    .details {
+      width: min(96vw, 520px);
+      background: rgba(255, 250, 242, 0.82);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgba(73, 36, 13, 0.14);
+    }
+
+    .details h2 {
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .details p {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .rsvp-button {
+      display: inline-block;
+      margin-top: 18px;
+      text-decoration: none;
+      background: #8b4e26;
+      color: #fff7ed;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 1rem;
+      box-shadow: 0 10px 22px rgba(73, 36, 13, 0.18);
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 0.88rem;
+      opacity: 0.75;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="page" id="introPage">
+      <div class="intro">
+        <h1 class="title">Tirth &amp; Siddhi</h1>
+        <p class="subtitle">Invite you to celebrate their wedding</p>
+
+        <div class="envelope-wrap" id="envelopeWrap" aria-label="Open invitation envelope">
+          <div class="envelope" id="envelope">
+            <div class="back"></div>
+            <div class="letter">
+              <div class="letter-content">
+                <div class="small-text">Wedding Invitation</div>
+                <div class="monogram">T&nbsp;♡&nbsp;S</div>
+                <div class="small-text">Tap to view</div>
+              </div>
+            </div>
+            <div class="front-left"></div>
+            <div class="front-right"></div>
+            <div class="front-bottom"></div>
+            <div class="flap"></div>
+            <div class="seal">T S</div>
+          </div>
+        </div>
+
+        <button class="open-button" id="openBtn">Open Invitation 💌</button>
+      </div>
+    </section>
+
+    <section class="video-section" id="videoSection">
+      <div class="video-card">
+        <!-- Replace invite-video.mp4 with your real video file name. Keep it in the same GitHub folder as this index.html file. -->
+        <video id="inviteVideo" controls playsinline preload="metadata">
+          <source src="TirthSiddhiInvite3.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="details">
+        <h2>We would love to celebrate with you</h2>
+        <p>Please watch the invitation video above and RSVP below.</p>
+
+        <!-- Replace this with your Google Form, RSVPify, Jotform, or WithJoy RSVP link -->
+        <a class="rsvp-button" href="https://docs.google.com/forms/d/e/1FAIpQLSf_39kvQE5k38OzVKsAsbwuRqjjvNBHAsqrbAPnzfCL0g2z0Q/viewform?usp=publish-editor" target="_blank" rel="noopener">RSVP Now</a>
+        <p class="note">Kindly RSVP at your earliest convenience.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    const envelopeWrap = document.getElementById('envelopeWrap');
+    const openBtn = document.getElementById('openBtn');
+    const introPage = document.getElementById('introPage');
+    const videoSection = document.getElementById('videoSection');
+    const inviteVideo = document.getElementById('inviteVideo');
+
+    function openInvitation() {
+      envelope.classList.add('open');
+      openBtn.disabled = true;
+      openBtn.textContent = 'Opening...';
+
+      setTimeout(() => {
+        introPage.style.display = 'none';
+        videoSection.classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        // Mobile browsers usually require user interaction before playing video.
+        inviteVideo.play().catch(() => {
+          // If autoplay is blocked, controls are visible so guest can tap play.
+        });
+      }, 1550);
+    }
+
+    envelopeWrap.addEventListener('click', openInvitation);
+    openBtn.addEventListener('click', openInvitation);
+  </script>
+</body>
+</html>
