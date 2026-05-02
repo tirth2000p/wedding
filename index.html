@@ -302,7 +302,7 @@
     <section class="video-section" id="videoSection">
       <div class="video-card">
         <!-- Replace invite-video.mp4 with your real video file name. Keep it in the same GitHub folder as this index.html file. -->
-        <video id="inviteVideo" controls playsinline preload="auto" webkit-playsinline>
+        <video id="inviteVideo" controls playsinline preload="metadata">
           <source src="TirthSiddhiInvite1.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
@@ -332,21 +332,15 @@
       openBtn.disabled = true;
       openBtn.textContent = 'Opening...';
 
-      // iPhone/iOS requires play with sound to happen directly from the tap/click.
-      // Do this before the animation delay, otherwise iOS treats it like blocked autoplay.
-      inviteVideo.muted = false;
-      inviteVideo.volume = 1;
-      const playPromise = inviteVideo.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // If iOS still blocks it, the visible controls let the guest tap play.
-        });
-      }
-
       setTimeout(() => {
         introPage.style.display = 'none';
         videoSection.classList.add('show');
         window.scrollTo({ top: 0, behavior: 'instant' });
+
+        // Mobile browsers usually require user interaction before playing video.
+        inviteVideo.play().catch(() => {
+          // If autoplay is blocked, controls are visible so guest can tap play.
+        });
       }, 1550);
     }
 
